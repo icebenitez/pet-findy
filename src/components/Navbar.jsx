@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import useAuth from "./useAuth"; // Assuming you have created the useAuth hook
+import useAuth from "../utils/hooks/useAuth"; // Assuming you have created the useAuth hook
 
 const Header = () => {
   const { user } = useAuth();
