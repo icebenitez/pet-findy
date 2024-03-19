@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import useRedirectIfAuthenticated from "../utils/hooks/useRedirectIfAuthenticated";
-import { auth } from "../utils/firebase";
 import Swal from "sweetalert2";
+
+import { auth } from "../utils/firebase";
+import useRedirectIfAuthenticated from "../utils/hooks/useRedirectIfAuthenticated";
 
 const LoginPage = () => {
   useRedirectIfAuthenticated();
