@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Swal from "sweetalert2";
-
-import { auth } from "../utils/firebase";
+import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import useRedirectIfAuthenticated from "../utils/hooks/useRedirectIfAuthenticated";
+import { auth } from "../utils/firebase";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   useRedirectIfAuthenticated();
@@ -37,7 +35,6 @@ const LoginPage = () => {
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
-            name="email"
             type="email"
             placeholder="Enter email"
             value={email}
@@ -48,7 +45,6 @@ const LoginPage = () => {
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            name="password"
             type="password"
             placeholder="Password"
             value={password}

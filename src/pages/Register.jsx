@@ -68,7 +68,6 @@ const RegisterPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              name="email"
             />
           </Form.Group>
 
@@ -80,7 +79,6 @@ const RegisterPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              name="password"
             />
           </Form.Group>
         </Row>
@@ -93,7 +91,6 @@ const RegisterPage = () => {
               placeholder="Enter first name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              name="firstName"
             />
           </Form.Group>
           <Form.Group as={Col} controlId="formBasicLastName" md={6}>
@@ -103,7 +100,6 @@ const RegisterPage = () => {
               placeholder="Enter last name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              name="lastName"
             />
           </Form.Group>
         </Row>
@@ -116,7 +112,6 @@ const RegisterPage = () => {
               placeholder="Enter address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              name="address"
             />
           </Form.Group>
 
@@ -127,7 +122,6 @@ const RegisterPage = () => {
               placeholder="Enter contact number"
               value={contactNumber}
               onChange={(e) => setContactNumber(e.target.value)}
-              name="contactNumber"
             />
           </Form.Group>
         </Row>
