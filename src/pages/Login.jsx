@@ -37,6 +37,7 @@ const LoginPage = () => {
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
+            name="email"
             type="email"
             placeholder="Enter email"
             value={email}
@@ -47,6 +48,7 @@ const LoginPage = () => {
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
+            name="password"
             type="password"
             placeholder="Password"
             value={password}
