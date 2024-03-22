@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Template from "../components/Template";
 import Protected from "../components/ProtectedPages";
+import AddPet from "../pages/AddPet";
 
 const router = createBrowserRouter([
   {
@@ -24,34 +25,15 @@ const router = createBrowserRouter([
           {
             path: "/",
             element: <Home />,
-            // children: [
-            //   {
-            //     path: "contact",
-            //     element: <Contact />,
-            //   },
-            //   {
-            //     path: "dashboard",
-            //     element: <Dashboard />,
-            //     loader: ({ request }) =>
-            //       fetch("/api/dashboard.json", {
-            //         signal: request.signal,
-            //       }),
-            //   },
-            //   {
-            //     element: <AuthLayout />,
-            //     children: [
-            //       {
-            //         path: "login",
-            //         element: <Login />,
-            //         loader: redirectIfUser,
-            //       },
-            //       {
-            //         path: "logout",
-            //         action: logoutUser,
-            //       },
-            //     ],
-            //   },
-            // ],
+          },
+          {
+            path: "pet",
+            children: [
+              {
+                path: "new",
+                element: <AddPet />,
+              },
+            ],
           },
         ],
       },
