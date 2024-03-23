@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 const useAuth = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(false);
 
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("authStateChanged :>> ", Date.now());
       if (currentUser) {
+        // console.log("currentUser :>> ", currentUser);
         setUser(currentUser);
         setLoading(false);
         // setError(null);
@@ -23,7 +24,11 @@ const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
-  return [user, loading];
+  // useEffect(() => {
+  //   console.log("user :>>", user?.uid);
+  // }, [user]);
+
+  return { user, loading };
 };
 
 export default useAuth;
