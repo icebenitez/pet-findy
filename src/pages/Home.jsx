@@ -15,13 +15,17 @@ import useAuth from "../utils/hooks/useAuth";
 import { db } from "../utils/firebase";
 
 const MainPage = () => {
-  const uid = useAuth()?.user.uid;
+  const uid = useAuth()?.user?.uid;
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
+    if (!uid) {
+      return;
+    }
+
     const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
       setUserDetails(snapshot.data());
       setUserDetailsIsLoading(false);
@@ -102,8 +106,8 @@ const MainPage = () => {
               </Button>
             </Stack>
             <Row xs={1} md={2} lg={3} className="g-4">
-              {pets?.map((pet, index) => (
-                <Col key={index}>
+              {pets?.map((pet) => (
+                <Col key={pet.id}>
                   <Link to={`${uid}/pets/${pet?.id}`}>
                     <Card>
                       <Card.Img variant="top" src={pet?.pictureUrl} />

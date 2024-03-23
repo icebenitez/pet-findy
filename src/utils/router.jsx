@@ -6,6 +6,7 @@ import Error from "../pages/Error";
 import Template from "../components/Template";
 import Protected from "../components/ProtectedPages";
 import AddPet from "../pages/AddPet";
+import Pet from "../pages/Pet";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: ":userId/pets/:petId",
+        element: <Pet />,
       },
     ],
     errorElement: <Error />,
