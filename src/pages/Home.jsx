@@ -60,7 +60,6 @@ const MainPage = () => {
               Add Pet
             </Button>
           </Stack>
-
           <Row xs={1} md={2} lg={3} className="g-4">
             {pets?.map((pet, index) => (
               <Col key={index}>
@@ -70,8 +69,6 @@ const MainPage = () => {
                     <Card.Title>{pet?.name}</Card.Title>
                     <Card.Text>
                       <strong>Date of Birth:</strong> {pet?.dateOfBirth}
-                      <br />
-                      <strong>Vaccines:</strong> {pet?.vaccines}
                     </Card.Text>
                   </Card.Body>
                 </Card>

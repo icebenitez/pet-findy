@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Template from "../components/Template";
 import Protected from "../components/ProtectedPages";
+import AddPet from "../pages/AddPet";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,12 @@ const router = createBrowserRouter([
           },
           {
             path: "pet",
-            children: [],
+            children: [
+              {
+                path: "new",
+                element: <AddPet />,
+              },
+            ],
           },
         ],
       },
