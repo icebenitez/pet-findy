@@ -1,27 +1,60 @@
 import React, { useState, useEffect } from "react";
-import { doc } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import {
   Container,
   Row,
   Col,
   Button,
   Card,
-  Form,
   Spinner,
   Stack,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import useDocOnSnapshot from "../utils/hooks/useDocOnSnapshot";
 import useAuth from "../utils/hooks/useAuth";
 import { db } from "../utils/firebase";
 
 const MainPage = () => {
   const uid = useAuth()?.user.uid;
-  const { data: userDetails, loading } = useDocOnSnapshot(
-    doc(db, "Users", `${uid}`)
-  );
+  const [userDetails, setUserDetails] = useState({});
+  const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
+  const [petsAreLoading, setPetsAreLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
+      setUserDetails(snapshot.data());
+      setUserDetailsIsLoading(false);
+    });
+
+    // Unsubscribe from the snapshot listener when the component unmounts
+    return () => unsubscribe();
+  }, [uid]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, `Users/${uid}/Pets`),
+      (snapshot) => {
+        const petsArr = [];
+        snapshot.forEach((doc) => {
+          petsArr.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        setPets(petsArr);
+        setPetsAreLoading(false);
+      }
+    );
+
+    // Unsubscribe from the snapshot listener when the component unmounts
+    return () => unsubscribe();
+  }, [uid]);
+
+  useEffect(() => {
+    console.log("pets :>> ", pets);
+  }, [pets]);
 
   return (
     <Container className="mt-5">
@@ -32,51 +65,61 @@ const MainPage = () => {
         </Button>
       </Stack>
 
-      {loading ? ( // If loading, display spinner
+      {userDetailsIsLoading ? ( // If loading, display spinner
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
       ) : (
-        userDetails && ( // If userDetails is not null, display user details
-          <>
-            <p>First Name: {userDetails.firstName}</p>
-            <p>Last Name: {userDetails.lastName}</p>
-            <p>Address: {userDetails.address}</p>
-            <p>Contact Number: {userDetails.contactNumber}</p>
-          </>
-        )
-      )}
-
-      {!loading && userDetails && (
         <>
-          <Stack direction="horizontal" gap={3}>
-            <h2 className="mt-4">Pets</h2>
-            <Button
-              variant="primary"
-              className="mt-3 ms-auto"
-              as={Link}
-              to="/pet/new"
-            >
-              Add Pet
-            </Button>
-          </Stack>
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {pets?.map((pet, index) => (
-              <Col key={index}>
-                <Card>
-                  <Card.Img variant="top" src={pet?.picture} />
-                  <Card.Body>
-                    <Card.Title>{pet?.name}</Card.Title>
-                    <Card.Text>
-                      <strong>Date of Birth:</strong> {pet?.dateOfBirth}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+          <Row gap={3} direction="horizontal">
+            <Col>
+              <p>
+                Full Name: {userDetails.firstName} {userDetails.lastName}
+              </p>
+            </Col>
+            <Col>
+              <p>Contact Number: {userDetails.contactNumber}</p>
+            </Col>
           </Row>
+          <p>Address: {userDetails.address}</p>
         </>
       )}
+
+      {!userDetailsIsLoading &&
+        userDetails &&
+        !petsAreLoading &&
+        pets.length > 0 && (
+          <>
+            <Stack direction="horizontal" gap={3}>
+              <h2 className="mt-4">Pets</h2>
+              <Button
+                variant="primary"
+                className="mt-3 ms-auto"
+                as={Link}
+                to="/pet/new"
+              >
+                Add Pet
+              </Button>
+            </Stack>
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {pets?.map((pet, index) => (
+                <Col key={index}>
+                  <Link to={`${uid}/pets/${pet?.id}`}>
+                    <Card>
+                      <Card.Img variant="top" src={pet?.pictureUrl} />
+                      <Card.Body>
+                        <Card.Title>{pet?.name}</Card.Title>
+                        <Card.Text>
+                          <strong>Date of Birth:</strong> {pet?.dateOfBirth}
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Link>
+                </Col>
+              ))}
+            </Row>
+          </>
+        )}
     </Container>
   );
 };
