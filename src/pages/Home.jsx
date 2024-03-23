@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  addDoc,
-  collection,
-  doc,
-  onSnapshot,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc } from "firebase/firestore";
 import {
   Container,
   Row,
@@ -14,39 +8,31 @@ import {
   Card,
   Form,
   Spinner,
+  Stack,
 } from "react-bootstrap";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
-// import useDocOnSnapshot from "../utils/hooks/useDocOnSnapshot";
-import useAuth from "../utils/hooks/useAuth";
-import { db } from "../utils/firebase";
 import { Link } from "react-router-dom";
 
-const ReactSwal = withReactContent(Swal);
+import useDocOnSnapshot from "../utils/hooks/useDocOnSnapshot";
+import useAuth from "../utils/hooks/useAuth";
+import { db } from "../utils/firebase";
 
 const MainPage = () => {
-  const uid = useAuth()?.user?.uid;
-  const [userDetails, setUserDetails] = useState({});
-  const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
+  const uid = useAuth()?.user.uid;
+  const { data: userDetails, loading } = useDocOnSnapshot(
+    doc(db, "Users", `${uid}`)
+  );
   const [pets, setPets] = useState([]);
-
-  useEffect(() => {
-    // console.log("docQuery :>>", docQuery);
-    console.log("useEffect is running :>> ");
-    const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
-      setUserDetails(snapshot.data());
-      setUserDetailsIsLoading(false);
-    });
-
-    // Unsubscribe from the snapshot listener when the component unmounts
-    return () => unsubscribe();
-  }, [uid]);
 
   return (
     <Container className="mt-5">
-      <h2>User Details</h2>
-      {userDetailsIsLoading ? ( // If loading, display spinner
+      <Stack direction="horizontal" gap={3}>
+        <h2>User Details</h2>
+        <Button variant="primary" className="mb-3 ms-auto">
+          Edit Profile
+        </Button>
+      </Stack>
+
+      {loading ? ( // If loading, display spinner
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
@@ -57,17 +43,23 @@ const MainPage = () => {
             <p>Last Name: {userDetails.lastName}</p>
             <p>Address: {userDetails.address}</p>
             <p>Contact Number: {userDetails.contactNumber}</p>
-
-            <Button variant="primary" className="mb-3">
-              Edit Profile
-            </Button>
           </>
         )
       )}
 
-      {!userDetailsIsLoading && userDetails && (
+      {!loading && userDetails && (
         <>
-          <h2 className="mt-4">Pets</h2>
+          <Stack direction="horizontal" gap={3}>
+            <h2 className="mt-4">Pets</h2>
+            <Button
+              variant="primary"
+              className="mt-3 ms-auto"
+              as={Link}
+              to="/pet/new"
+            >
+              Add Pet
+            </Button>
+          </Stack>
           <Row xs={1} md={2} lg={3} className="g-4">
             {pets?.map((pet, index) => (
               <Col key={index}>
@@ -83,10 +75,6 @@ const MainPage = () => {
               </Col>
             ))}
           </Row>
-
-          <Button as={Link} variant="primary" className="mt-3" to="/pet/new">
-            Add Pet
-          </Button>
         </>
       )}
     </Container>
