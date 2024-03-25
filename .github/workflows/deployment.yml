@@ -20,6 +20,11 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
 
   deploy:
     name: Deploy
@@ -28,10 +33,14 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: dist
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
