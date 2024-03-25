@@ -15,14 +15,13 @@ import useAuth from "../utils/hooks/useAuth";
 import { db } from "../utils/firebase";
 
 const MainPage = () => {
-  const uid = useAuth()?.user?.uid;
+  const uid = useAuth()?.user.uid;
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
-    console.log("users onSnapshot is running");
     const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
       setUserDetails(snapshot.data());
       setUserDetailsIsLoading(false);
@@ -33,7 +32,6 @@ const MainPage = () => {
   }, [uid]);
 
   useEffect(() => {
-    console.log("pets onSnapshot is running");
     const unsubscribe = onSnapshot(
       collection(db, `Users/${uid}/Pets`),
       (snapshot) => {
