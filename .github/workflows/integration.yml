@@ -22,8 +22,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run in Local Env
-        run: npm run dev
-
       - name: Run tests
-        run: npm run cypress:run
+        run: npm run dev && npm run cypress:run
