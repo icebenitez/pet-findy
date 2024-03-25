@@ -121,7 +121,6 @@ const AddPetPage = () => {
   };
 
   const handlePetDataChange = (e) => {
-    console.log(e.target);
     const { name, value } = e.target;
     setPetData((prevState) => ({
       ...prevState,

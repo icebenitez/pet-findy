@@ -5,8 +5,9 @@ import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Template from "../components/Template";
 import Protected from "../components/ProtectedPages";
-import AddPet from "../pages/AddPet";
 import Pet from "../pages/Pet";
+import AddPet from "../pages/AddPet";
+import EditPet from "../pages/EditPet";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
                 element: <AddPet />,
               },
             ],
+          },
+          {
+            path: ":userId/pets/:petId/edit",
+            element: <EditPet />,
           },
         ],
       },

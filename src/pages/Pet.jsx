@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebase"; // Ensure db is initialized properly
 import { Button, Container, Spinner } from "react-bootstrap";
+import useAuth from "../utils/hooks/useAuth";
+
+// http://localhost:5173/TpdzAvzbU0OKeiHck6NoRK1lPG32/pets/4ZT1jVt6C7D8S1pPnRFX
 
 const Pet = () => {
   const { userId, petId } = useParams();
+  const { user } = useAuth();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    console.log("pet :>> ", pet);
-  }, [pet]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -55,8 +55,11 @@ const Pet = () => {
         {pet.dateOfBirth && <p>Date of Birth: {pet.dateOfBirth}</p>}
         {/* Display other pet details here */}
       </div>
-      <p>To edit this pet's details, you must be authenticated.</p>
-      <Button as={Link} to={`/edit/${userId}/${petId}`} variant="primary">
+      {user ? (
+        <p>To edit this pet's details, you must be authenticated.</p>
+      ) : null}
+
+      <Button as={Link} to={user ? "edit" : "../login"}>
         Edit
       </Button>
     </Container>

@@ -22,10 +22,7 @@ const MainPage = () => {
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
-    if (!uid) {
-      return;
-    }
-
+    console.log("users onSnapshot is running");
     const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
       setUserDetails(snapshot.data());
       setUserDetailsIsLoading(false);
@@ -36,6 +33,7 @@ const MainPage = () => {
   }, [uid]);
 
   useEffect(() => {
+    console.log("pets onSnapshot is running");
     const unsubscribe = onSnapshot(
       collection(db, `Users/${uid}/Pets`),
       (snapshot) => {
@@ -76,12 +74,12 @@ const MainPage = () => {
       ) : (
         <>
           <Row gap={3} direction="horizontal">
-            <Col>
+            <Col md="6">
               <p>
                 Full Name: {userDetails.firstName} {userDetails.lastName}
               </p>
             </Col>
-            <Col>
+            <Col md="6">
               <p>Contact Number: {userDetails.contactNumber}</p>
             </Col>
           </Row>
