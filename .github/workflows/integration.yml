@@ -30,6 +30,6 @@ jobs:
         with:
           build: npm run build
           wait-on: 'http://localhost:5173'
-          start: npm start
+          start: npm run dev
           record: true
           group: 'Continuous Integration'
