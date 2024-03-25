@@ -26,10 +26,4 @@ jobs:
         run: npm run build
 
       - name: Test with Cypress
-        uses: cypress-io/github-action@v2
-        with:
-          build: npm run build
-          wait-on: 'http://localhost:5173'
-          start: npm run dev
-          record: true
-          group: 'Continuous Integration'
+        uses: cypress-io/github-action@v6
