@@ -7,7 +7,7 @@ on:
       - develop
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,7 +23,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: build
+    needs: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -34,3 +34,4 @@ jobs:
           args: deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
