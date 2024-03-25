@@ -72,12 +72,12 @@ const MainPage = () => {
       ) : (
         <>
           <Row gap={3} direction="horizontal">
-            <Col>
+            <Col md="6">
               <p>
                 Full Name: {userDetails.firstName} {userDetails.lastName}
               </p>
             </Col>
-            <Col>
+            <Col md="6">
               <p>Contact Number: {userDetails.contactNumber}</p>
             </Col>
           </Row>
@@ -102,8 +102,8 @@ const MainPage = () => {
               </Button>
             </Stack>
             <Row xs={1} md={2} lg={3} className="g-4">
-              {pets?.map((pet, index) => (
-                <Col key={index}>
+              {pets?.map((pet) => (
+                <Col key={pet.id}>
                   <Link to={`${uid}/pets/${pet?.id}`}>
                     <Card>
                       <Card.Img variant="top" src={pet?.pictureUrl} />
