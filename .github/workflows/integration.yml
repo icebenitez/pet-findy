@@ -1,32 +1,26 @@
 name: Continuous Integration
 
 on:
-  # push:
-  #   branches:
-  #     - main  # Specify the branch you want to trigger the workflow on
   pull_request:
     branches:
       - main
-      - develop  # Specify the branch you want to trigger the workflow on
+      - develop
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Specify the operating system for the runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # This action checks out your repository's code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Specify the Node.js version you want to use
+          node-version: '20'
 
       - name: Install dependencies
-        run: npm ci  # Or yarn install, depending on your package manager
+        run: npm ci 
 
       - name: Run tests
-        run: npm test  # Or yarn test, depending on your package manager
-
-      # - name: Create Builds
-      #   run: npm run build  # Or yarn test, depending on your package manager
+        run: npm run cypress:run
