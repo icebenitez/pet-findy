@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../utils/hooks/useAuth";
 
 const Protected = () => {
-  const { user, loading } = useOutletContext();
+  const { user } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Protected = () => {
 
   return (
     <>
-      <Outlet context={{ user, loading }} />
+      <Outlet />
     </>
   );
 };
