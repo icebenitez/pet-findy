@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebase"; // Ensure db is initialized properly

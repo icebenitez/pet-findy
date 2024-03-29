@@ -1,16 +1,15 @@
-import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import useAuth from "../utils/hooks/useAuth";
+import { useEffect } from "react";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 
 const Protected = () => {
-  const { user, loading } = useAuth();
+  const { user } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!user?.uid) {
       navigate("/login");
     }
-  }, [loading, user, navigate]);
+  }, [user, navigate]);
 
   return (
     <>

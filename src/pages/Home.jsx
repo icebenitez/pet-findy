@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -9,31 +8,34 @@ import {
   Spinner,
   Stack,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 
-import useAuth from "../utils/hooks/useAuth";
 import { db } from "../utils/firebase";
 
-const MainPage = () => {
-  const uid = useAuth()?.user.uid;
+const Home = () => {
+  const { user } = useOutletContext();
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
-      setUserDetails(snapshot.data());
-      setUserDetailsIsLoading(false);
-    });
+    const unsubscribe = onSnapshot(
+      doc(db, `Users/${user?.uid}`),
+      (snapshot) => {
+        setUserDetails(snapshot.data());
+        setUserDetailsIsLoading(false);
+      }
+    );
 
     // Unsubscribe from the snapshot listener when the component unmounts
     return () => unsubscribe();
-  }, [uid]);
+  }, [user]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, `Users/${uid}/Pets`),
+      collection(db, `Users/${user?.uid}/Pets`),
       (snapshot) => {
         const petsArr = [];
         snapshot.forEach((doc) => {
@@ -50,11 +52,7 @@ const MainPage = () => {
 
     // Unsubscribe from the snapshot listener when the component unmounts
     return () => unsubscribe();
-  }, [uid]);
-
-  useEffect(() => {
-    console.log("pets :>> ", pets);
-  }, [pets]);
+  }, [user]);
 
   return (
     <Container className="mt-5">
@@ -124,4 +122,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default Home;
