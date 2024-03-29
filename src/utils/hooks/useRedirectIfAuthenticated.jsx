@@ -7,7 +7,7 @@ const useRedirectIfAuthenticated = () => {
 
   useEffect(() => {
     if (user?.uid) {
-      navigate("/"); // Redirect to main page if user is authenticated
+      navigate("/");
     }
   }, [user, navigate]);
 };

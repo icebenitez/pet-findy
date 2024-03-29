@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 
 const Protected = () => {
-  const { user } = useOutletContext();
+  const { user, loading } = useOutletContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Protected = () => {
 
   return (
     <>
-      <Outlet />
+      <Outlet context={{ user, loading }} />
     </>
   );
 };
