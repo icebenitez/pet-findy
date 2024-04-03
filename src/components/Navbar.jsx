@@ -1,10 +1,27 @@
 import React from "react";
 import { Navbar, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import useAuth from "../utils/hooks/useAuth"; // Assuming you have created the useAuth hook
+import Swal from "sweetalert2";
+import { signOut } from "@firebase/auth";
+
+import { auth } from "../utils/firebase";
+import useAuth from "../utils/hooks/useAuth";
 
 const Header = () => {
   const { user } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log("error in signing out :>> ", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message,
+      });
+    }
+  };
 
   return (
     <Navbar bg="light" expand="lg">
@@ -26,9 +43,9 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           {user ? (
             // If user is authenticated, display logout button
-            <Link to="/logout">
-              <Button variant="outline-primary">Logout</Button>
-            </Link>
+            <Button variant="outline-primary" onClick={handleLogout}>
+              Logout
+            </Button>
           ) : (
             // If user is not authenticated, display login button
             <Link to="/login">

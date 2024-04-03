@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc, Timestamp } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import useRedirectIfAuthenticated from "../utils/hooks/useRedirectIfAuthenticated";
+import { auth, db } from "../utils/firebase.js";
+import Swal from "sweetalert2";
 
 const RegisterPage = () => {
   useRedirectIfAuthenticated();
@@ -13,7 +15,6 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [contactNumber, setContactNumber] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,18 +26,6 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (!email || !validateEmail(email)) {
-      setError("Invalid email address");
-      return;
-    }
-    if (!password) {
-      setError("Password is required");
-      return;
-    }
-
-    const auth = getAuth();
-    const db = getFirestore();
 
     setLoading(true);
     try {
@@ -56,14 +45,15 @@ const RegisterPage = () => {
 
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      console.log("error in creating a user :>>", err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.message,
+      });
     }
     setLoading(false);
   };
-
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
-  }
 
   return (
     <Container className="mt-5">
@@ -71,24 +61,26 @@ const RegisterPage = () => {
       <Form onSubmit={handleRegister}>
         <Row className="mb-2">
           <Form.Group as={Col} controlId="formBasicEmail" md={6}>
-            <Form.Label>Email address</Form.Label>
+            <Form.Label>Email address (required)</Form.Label>
             <Form.Control
               type="email"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              name="email"
             />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formBasicPassword" md={6}>
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Password (required, min. of 6 characters)</Form.Label>
             <Form.Control
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              name="password"
             />
           </Form.Group>
         </Row>
@@ -101,7 +93,7 @@ const RegisterPage = () => {
               placeholder="Enter first name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              required
+              name="firstName"
             />
           </Form.Group>
           <Form.Group as={Col} controlId="formBasicLastName" md={6}>
@@ -111,7 +103,7 @@ const RegisterPage = () => {
               placeholder="Enter last name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              required
+              name="lastName"
             />
           </Form.Group>
         </Row>
@@ -124,7 +116,7 @@ const RegisterPage = () => {
               placeholder="Enter address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              required
+              name="address"
             />
           </Form.Group>
 
@@ -135,7 +127,7 @@ const RegisterPage = () => {
               placeholder="Enter contact number"
               value={contactNumber}
               onChange={(e) => setContactNumber(e.target.value)}
-              required
+              name="contactNumber"
             />
           </Form.Group>
         </Row>
