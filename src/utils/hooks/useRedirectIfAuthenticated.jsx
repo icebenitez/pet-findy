@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const useRedirectIfAuthenticated = () => {
-  const { user } = useOutletContext();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading && user?.uid) {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 };
 
 export default useRedirectIfAuthenticated;
