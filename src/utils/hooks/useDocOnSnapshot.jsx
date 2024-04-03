@@ -8,7 +8,6 @@ const useDocOnSnapshot = (docQuery) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // console.log("docQuery :>>", docQuery);
     const unsubscribe = onSnapshot(docQuery, (snapshot) => {
       setData(snapshot.data());
       setLoading(false);

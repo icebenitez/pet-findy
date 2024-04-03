@@ -16,17 +16,12 @@ import { db, storage } from "../utils/firebase"; // Import your Firebase configu
 const base_url = window.location.origin;
 
 const AddPetPage = () => {
-  const location = useLocation();
   const userId = useOutletContext()?.user.uid;
   const [petData, setPetData] = useState({
     picture: "",
     name: "",
     dateOfBirth: "",
   });
-
-  useEffect(() => {
-    console.log("location :>> ", location);
-  }, [location]);
 
   const handleAddPet = async () => {
     const { picture, name, dateOfBirth } = petData;

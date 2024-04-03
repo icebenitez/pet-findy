@@ -68,24 +68,17 @@ const EditPetPage = () => {
         },
       });
 
-      console.log("swal fired");
-
       let editedPetData = {};
 
       // Check each field in the formData
       for (const [key, value] of Object.entries(formData)) {
-        // Only include fields with non-empty values
-        console.log("key :>> ", key);
         if (key === "picture") continue;
         if (value !== pet[key]) {
           editedPetData[key] = value;
         }
       }
 
-      console.log(editedPetData);
-
       // Log the edit in the 'Logs' subcollection
-      console.log("adding in docs in Logs subcollection");
       await addDoc(collection(db, `Users/${userId}/Pets/${petId}/Logs`), {
         userId: uid, // Assuming you have access to the current user's ID
         timestamp: serverTimestamp(),
@@ -93,7 +86,6 @@ const EditPetPage = () => {
       });
 
       // Upload pet image to Firebase Storage
-      console.log("adding in picture in storage");
       if (!formData?.picture) {
         const pictureRef = ref(
           storage,
@@ -104,7 +96,6 @@ const EditPetPage = () => {
       }
 
       // Update pet details
-      console.log("updating document in pets subcollection");
       await updateDoc(doc(db, `Users/${userId}/Pets/${petId}`), editedPetData);
 
       // Reset pet data for the next addition
