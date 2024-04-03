@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   addDoc,
   collection,
@@ -6,29 +7,27 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Stack, Row, Col } from "react-bootstrap";
 import Swal from "sweetalert2";
 import QRCode from "qrcode";
 
 import { db, storage } from "../utils/firebase"; // Import your Firebase configuration
-import useAuth from "../utils/hooks/useAuth";
 
-const domain = "http://localhost:5173";
+const base_url = window.location.origin;
 
 const AddPetPage = () => {
+  const navigate = useNavigate();
   const userId = useAuth()?.user.uid;
   const [petData, setPetData] = useState({
     picture: "",
     name: "",
     dateOfBirth: "",
+    contactDetails: "",
+    address: "",
   });
 
-  useEffect(() => {
-    console.log("petData :>> ", petData);
-  }, [petData]);
-
   const handleAddPet = async () => {
-    const { picture, name, dateOfBirth } = petData;
+    const { picture, name, dateOfBirth, contactDetails, address } = petData;
 
     // Validate pet data
     if (!picture || !name) {
@@ -56,6 +55,8 @@ const AddPetPage = () => {
         name,
         dateOfBirth,
         createdAt: serverTimestamp(), // Firestore server timestamp
+        contactDetails,
+        address,
       });
 
       // Upload pet image to Firebase Storage
@@ -69,7 +70,7 @@ const AddPetPage = () => {
       const url = `${userId}/pets/${petRef.id}`;
 
       // Generate URL for the pet page
-      const petUrl = `${domain}/${url}`;
+      const petUrl = `${base_url}/${url}`;
       const qrCodeImage = await QRCode.toDataURL(petUrl);
 
       // Upload QR code image to Firebase Storage
@@ -90,6 +91,8 @@ const AddPetPage = () => {
         picture: "",
         name: "",
         dateOfBirth: "",
+        contactDetails: "",
+        address: "",
       });
 
       // Show Swal alert with QR code
@@ -130,7 +133,18 @@ const AddPetPage = () => {
 
   return (
     <Container className="mt-5">
-      <h2>Add Pet</h2>
+      <Stack direction="horizontal" gap={3}>
+        <h2>Add Pet</h2>
+        <Button
+          className="ms-auto"
+          variant="primary"
+          type="button"
+          onClick={() => navigate("/")}
+        >
+          Home
+        </Button>
+      </Stack>
+
       <Form>
         <Form.Group className="mb-3" controlId="formPetPicture">
           <Form.Label>Pet Picture</Form.Label>
@@ -138,6 +152,7 @@ const AddPetPage = () => {
             type="file"
             name="picture"
             onChange={handlePetDataChange}
+            accept="image/png, image/gif, image/jpeg"
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formPetName">
@@ -149,13 +164,38 @@ const AddPetPage = () => {
             onChange={handlePetDataChange}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formPetDateOfBirth">
-          <Form.Label>Date of Birth</Form.Label>
+        <Row className="mb-2">
+          <Form.Group as={Col} className="mb-3" controlId="formPetDateOfBirth">
+            <Form.Label>Date of Birth</Form.Label>
+            <Form.Control
+              type="date"
+              name="dateOfBirth"
+              value={petData.dateOfBirth}
+              onChange={handlePetDataChange}
+            />
+          </Form.Group>
+          <Form.Group as={Col} className="mb-3" controlId="contactDetails">
+            <Form.Label>Contact Details</Form.Label>
+            <Form.Control
+              name="contactDetails"
+              type="text"
+              placeholder="Enter contact details"
+              value={petData.contactDetails}
+              onChange={handlePetDataChange}
+              required
+            />
+          </Form.Group>
+        </Row>
+
+        <Form.Group className="mb-3" controlId="address">
+          <Form.Label>Address</Form.Label>
           <Form.Control
-            type="date"
-            name="dateOfBirth"
-            value={petData.dateOfBirth}
+            name="address"
+            type="text"
+            placeholder="Enter address"
+            value={petData.address}
             onChange={handlePetDataChange}
+            required
           />
         </Form.Group>
         <Button variant="primary" type="button" onClick={handleAddPet}>

@@ -1,5 +1,5 @@
-import { getAuth } from "@firebase/auth";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "@firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -20,4 +20,5 @@ export const app = initializeApp(firebaseConfig);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+// connectAuthEmulator(auth, "http://127.0.0.1:9099");
 export const storage = getStorage(app);

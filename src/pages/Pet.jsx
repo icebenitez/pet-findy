@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-
+import { useParams, Link } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../utils/firebase"; // Ensure db is initialized properly
 import { Button, Container, Spinner } from "react-bootstrap";
-import useAuth from "../utils/hooks/useAuth";
 
-// http://localhost:5173/TpdzAvzbU0OKeiHck6NoRK1lPG32/pets/4ZT1jVt6C7D8S1pPnRFX
+import useAuth from "../utils/hooks/useAuth";
+import { db } from "../utils/firebase";
 
 const Pet = () => {
   const { userId, petId } = useParams();
@@ -23,7 +21,6 @@ const Pet = () => {
       }
     );
 
-    // Unsubscribe from the snapshot listener when the component unmounts
     return () => unsubscribe();
   }, [userId, petId]);
 
@@ -53,15 +50,17 @@ const Pet = () => {
           </div>
         )}
         {pet.dateOfBirth && <p>Date of Birth: {pet.dateOfBirth}</p>}
+        {pet?.contactDetails && <p>Contact Details: {pet.contactDetails}</p>}
+        {pet?.address && <p>Address: {pet.address}</p>}
         {/* Display other pet details here */}
       </div>
-      {user ? (
-        <p>To edit this pet's details, you must be authenticated.</p>
-      ) : null}
-
-      <Button as={Link} to={user ? "edit" : "../login"}>
-        Edit
-      </Button>
+      {user?.uid ? (
+        <Button as={Link} to={user ? "edit" : "../login"}>
+          Edit
+        </Button>
+      ) : (
+        <p>Please sign in to edit this pet's details.</p>
+      )}
     </Container>
   );
 };

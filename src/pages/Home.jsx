@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -10,11 +9,12 @@ import {
   Stack,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 
-import useAuth from "../utils/hooks/useAuth";
 import { db } from "../utils/firebase";
+import useAuth from "../utils/hooks/useAuth";
 
-const MainPage = () => {
+const Home = () => {
   const uid = useAuth()?.user.uid;
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
@@ -22,7 +22,7 @@ const MainPage = () => {
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "Users", `${uid}`), (snapshot) => {
+    const unsubscribe = onSnapshot(doc(db, `Users/${uid}`), (snapshot) => {
       setUserDetails(snapshot.data());
       setUserDetailsIsLoading(false);
     });
@@ -52,17 +52,13 @@ const MainPage = () => {
     return () => unsubscribe();
   }, [uid]);
 
-  useEffect(() => {
-    console.log("pets :>> ", pets);
-  }, [pets]);
-
   return (
     <Container className="mt-5">
       <Stack direction="horizontal" gap={3}>
         <h2>User Details</h2>
-        <Button variant="primary" className="mb-3 ms-auto">
+        {/* <Button variant="primary" className="mb-3 ms-auto">
           Edit Profile
-        </Button>
+        </Button> */}
       </Stack>
 
       {userDetailsIsLoading ? ( // If loading, display spinner
@@ -124,4 +120,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default Home;
