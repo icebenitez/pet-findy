@@ -8,7 +8,6 @@ const useDocOnSnapshot = (collectionPath) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(collectionPath);
     const unsubscribe = onSnapshot(doc(db, collectionPath), (snapshot) => {
       setData(snapshot.data());
       setLoading(false);

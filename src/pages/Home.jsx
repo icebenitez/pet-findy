@@ -8,13 +8,14 @@ import {
   Spinner,
   Stack,
 } from "react-bootstrap";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 
 import { db } from "../utils/firebase";
+import useAuth from "../utils/hooks/useAuth";
 
 const Home = () => {
-  const uid = useOutletContext()?.user.uid;
+  const uid = useAuth()?.user.uid;
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
@@ -55,9 +56,9 @@ const Home = () => {
     <Container className="mt-5">
       <Stack direction="horizontal" gap={3}>
         <h2>User Details</h2>
-        <Button variant="primary" className="mb-3 ms-auto">
+        {/* <Button variant="primary" className="mb-3 ms-auto">
           Edit Profile
-        </Button>
+        </Button> */}
       </Stack>
 
       {userDetailsIsLoading ? ( // If loading, display spinner
