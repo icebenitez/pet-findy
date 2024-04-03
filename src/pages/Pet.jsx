@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link, useOutletContext } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { Button, Container, Spinner } from "react-bootstrap";
-import useAuth from "../utils/hooks/useAuth";
 
 const Pet = () => {
   const { userId, petId } = useParams();
-  const { user } = useAuth();
+  const { user } = useOutletContext();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
 
