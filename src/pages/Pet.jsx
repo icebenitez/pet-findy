@@ -50,13 +50,13 @@ const Pet = () => {
         {pet.dateOfBirth && <p>Date of Birth: {pet.dateOfBirth}</p>}
         {/* Display other pet details here */}
       </div>
-      {user ? (
+      {user?.uid ? (
+        <Button as={Link} to={user ? "edit" : "../login"}>
+          Edit
+        </Button>
+      ) : (
         <p>To edit this pet's details, you must be authenticated.</p>
-      ) : null}
-
-      <Button as={Link} to={user ? "edit" : "../login"}>
-        Edit
-      </Button>
+      )}
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navbar, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -41,7 +41,7 @@ const Header = () => {
         {/* Conditional button on the right side */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          {user ? (
+          {user?.uid ? (
             // If user is authenticated, display logout button
             <Button variant="outline-primary" onClick={handleLogout}>
               Logout
