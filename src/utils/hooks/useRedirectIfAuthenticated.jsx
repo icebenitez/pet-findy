@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useAuth from "./useAuth"; // Assuming you have created the useAuth hook
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const useRedirectIfAuthenticated = () => {
   const { user, loading } = useAuth();
@@ -8,7 +7,7 @@ const useRedirectIfAuthenticated = () => {
 
   useEffect(() => {
     if (!loading && user) {
-      navigate("/"); // Redirect to main page if user is authenticated
+      navigate("/");
     }
   }, [user, loading, navigate]);
 };

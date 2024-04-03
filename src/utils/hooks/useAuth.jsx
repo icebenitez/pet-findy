@@ -17,23 +17,16 @@ const useAuth = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       console.log("authStateChanged :>> ", Date.now());
       if (currentUser) {
-        // console.log("currentUser :>> ", currentUser);
         setUser(currentUser);
         setLoading(false);
-        // setError(null);
       } else {
-        setUser(null);
+        setUser({});
         setLoading(false);
-        // setError(new Error("User not authenticated"));
       }
     });
 
     return () => unsubscribe();
   }, []);
-
-  // useEffect(() => {
-  //   console.log("user :>>", user?.uid);
-  // }, [user]);
 
   return { user, loading };
 };
