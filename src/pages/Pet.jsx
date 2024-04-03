@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../utils/firebase"; // Ensure db is initialized properly
+import { db } from "../utils/firebase";
 import { Button, Container, Spinner } from "react-bootstrap";
 import useAuth from "../utils/hooks/useAuth";
-
-// http://localhost:5173/TpdzAvzbU0OKeiHck6NoRK1lPG32/pets/4ZT1jVt6C7D8S1pPnRFX
 
 const Pet = () => {
   const { userId, petId } = useParams();
@@ -22,8 +19,7 @@ const Pet = () => {
         setLoading(false);
       }
     );
-
-    // Unsubscribe from the snapshot listener when the component unmounts
+    
     return () => unsubscribe();
   }, [userId, petId]);
 
