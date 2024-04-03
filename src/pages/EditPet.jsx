@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Container, Form, Button, Col, Row } from "react-bootstrap";
 
@@ -13,11 +13,10 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-import useAuth from "../utils/hooks/useAuth";
 import { db, storage } from "../utils/firebase";
 
 const EditPetPage = () => {
-  const uid = useAuth()?.user.uid;
+  const uid = useOutletContext()?.user.uid;
   const { userId, petId } = useParams();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);

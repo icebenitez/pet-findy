@@ -14,28 +14,25 @@ import { collection, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 const Home = () => {
-  const { user } = useOutletContext();
+  const uid = useOutletContext()?.user.uid;
   const [userDetails, setUserDetails] = useState({});
   const [userDetailsIsLoading, setUserDetailsIsLoading] = useState(true);
   const [pets, setPets] = useState([]);
   const [petsAreLoading, setPetsAreLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, `Users/${user?.uid}`),
-      (snapshot) => {
-        setUserDetails(snapshot.data());
-        setUserDetailsIsLoading(false);
-      }
-    );
+    const unsubscribe = onSnapshot(doc(db, `Users/${uid}`), (snapshot) => {
+      setUserDetails(snapshot.data());
+      setUserDetailsIsLoading(false);
+    });
 
     // Unsubscribe from the snapshot listener when the component unmounts
     return () => unsubscribe();
-  }, [user]);
+  }, [uid]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      collection(db, `Users/${user?.uid}/Pets`),
+      collection(db, `Users/${uid}/Pets`),
       (snapshot) => {
         const petsArr = [];
         snapshot.forEach((doc) => {
@@ -52,7 +49,7 @@ const Home = () => {
 
     // Unsubscribe from the snapshot listener when the component unmounts
     return () => unsubscribe();
-  }, [user]);
+  }, [uid]);
 
   return (
     <Container className="mt-5">

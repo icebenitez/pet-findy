@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useOutletContext } from "react-router";
 import {
   addDoc,
   collection,
@@ -11,12 +12,12 @@ import Swal from "sweetalert2";
 import QRCode from "qrcode";
 
 import { db, storage } from "../utils/firebase"; // Import your Firebase configuration
-import useAuth from "../utils/hooks/useAuth";
 
-const domain = "http://localhost:5173";
+const base_url = window.location.origin;
 
 const AddPetPage = () => {
-  const userId = useAuth()?.user.uid;
+  const location = useLocation();
+  const userId = useOutletContext()?.user.uid;
   const [petData, setPetData] = useState({
     picture: "",
     name: "",
@@ -24,8 +25,8 @@ const AddPetPage = () => {
   });
 
   useEffect(() => {
-    console.log("petData :>> ", petData);
-  }, [petData]);
+    console.log("location :>> ", location);
+  }, [location]);
 
   const handleAddPet = async () => {
     const { picture, name, dateOfBirth } = petData;
@@ -69,7 +70,7 @@ const AddPetPage = () => {
       const url = `${userId}/pets/${petRef.id}`;
 
       // Generate URL for the pet page
-      const petUrl = `${domain}/${url}`;
+      const petUrl = `${base_url}/${url}`;
       const qrCodeImage = await QRCode.toDataURL(petUrl);
 
       // Upload QR code image to Firebase Storage
