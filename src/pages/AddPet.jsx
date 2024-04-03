@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 import QRCode from "qrcode";
 
 import { db, storage } from "../utils/firebase"; // Import your Firebase configuration
-import useAuth from "../utils/hooks/useAuth";
 
 const base_url = window.location.origin;
 

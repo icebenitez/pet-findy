@@ -8,7 +8,7 @@ import { db } from "../utils/firebase";
 
 const Pet = () => {
   const { userId, petId } = useParams();
-  const { user } = useAuth();
+  const { user } = useOutletContext();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
 
